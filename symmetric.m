@@ -6,8 +6,8 @@ global lambda nf ns nc h  %전역변수 지정 시도
 % nf = input('film refraction index: ');
 % ns = input('substrate refraction index: ');
 % nc = input('cover refractioin index: ');
-% h = input('waveguide thickness: ');
-% lambda = input('wavelength: ');
+% h = input('waveguide thickness: (/mum)')*10^(-6);
+% lambda = input('wavelength: /mum')*10^(-6);
 nf = 3.590;
 ns = 3.385;
 nc = 3.385;
@@ -78,44 +78,30 @@ end
 axis(ax1,[0 6 0 6]);
 grid on;
 %mode그래프
-% x=-h-h/2:0.00001:h/2;
-% wave=[];
-% for i = 1:lmods
-%     md= mods(i);
-%     k=0;
-%     for it = x
-%        k=k+1;
-%        x(k) = it;
-%        wave(k)=w(x(k),md);
-%     end
-%     ax = subplot(lmods+1,1,i+1);
-%     plot(ax,x,wave,'k')
-%     xlim(ax,[-3/2*h 1/2*h])
-%     title(['mode' num2str(i-1)])
-%     xlabel('Position(\mum)')
-%     grid on;
-% end
-% for i = 1:lmods
-%     md= mods(i);
-%     x=-h:0.00001:h;
-%     k=0;
-%     if mod(i,2) ~= 0
-%         for it = x
-%             k=k+1;
-%             x(k) = it;
-%             wave(k)=ew(x(k),md);
-%         end
-%     else    
-%         for it = x
-%             k=k+1;
-%             x(k) = it;
-%             wave(k)=ow(x(k),md);
-%         end
-%     end    
-%     ax = subplot(lmods+1,1,i+1);
-%     plot(ax,x,wave)
-%     %xlim(ax,[-h h])
-%     title(['mode' num2str(i-1)])
-%     xlabel('Position(\mum)')
-%     grid on;
-% end
+x=-h-h/2:0.00001:h/2;
+wave=[];
+
+for i = 1:lmods
+    md= mods(i);
+    x=-h:0.00000001:h;
+    k=0;
+    if mod(i,2) ~= 0
+        for it = x
+            k=k+1;
+            x(k) = it;
+            wave(k)=ew(x(k),md);
+        end
+    else    
+        for it = x
+            k=k+1;
+            x(k) = it;
+            wave(k)=ow(x(k),md);
+        end
+    end    
+    ax = subplot(lmods+1,1,i+1);
+    plot(ax,x,wave)
+    %xlim(ax,[-h h])
+    title(['mode' num2str(i-1)])
+    xlabel('Position(\mum)')
+    grid on;
+end
