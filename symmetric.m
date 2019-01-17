@@ -11,7 +11,7 @@ global lambda nf ns nc h  %전역변수 지정 시도
 nf = 3.590;
 ns = 3.385;
 nc = 3.385;
-h = 1.0*10^(-6);
+h = 0.3*10^(-6);
 lambda = 0.9*10^(-6);
 %변수값 받아서 연산하는 애들은 전역변수 선언에서 제외함.
 k = 2*pi/lambda;
@@ -64,6 +64,7 @@ plot(ax1,kappa.*h./2,-1*(kappa.*h./2).*cot(kappa.*h./2),'b')
 hold on %교점
 plot(ax1,kappa.*h./2,sqrt(-1*(kappa.*h./2).^2+(nf^2-ns^2)*((k*h/2)^2)),'g')
 xlabel('k_{x}h/2')
+ylabel('\gammad/2')
 for i = 1:lemd
     r = emd(i);
     plot(ax1,r*h./2,(r.*h./2).*tan(r.*h./2),'o')
@@ -75,10 +76,10 @@ for i = 1:lomd
     hold on
 end    
 %그래프 속성
-axis(ax1,[0 6 0 6]);
+axis(ax1,[0 kmax*h/2+1 0 kmax*h/2+1]);
 grid on;
 %mode그래프
-x=-h-h/2:0.00001:h/2;
+
 wave=[];
 
 for i = 1:lmods
@@ -101,7 +102,7 @@ for i = 1:lmods
     ax = subplot(lmods+1,1,i+1);
     plot(ax,x,wave)
     %xlim(ax,[-h h])
-    title(['mode' num2str(i-1)])
+    title(['<mode' num2str(i-1) '>'])
     xlabel('Position(\mum)')
     grid on;
 end
