@@ -11,18 +11,18 @@ global lambda nf ns nc h  %전역변수 지정 시도
 nf = 3.590;
 ns = 3.385;
 nc = 3.385;
-h = 0.45*10^(-6);
+h = 0.3*10^(-6);
 lambda = 0.9*10^(-6);
 %변수값 받아서 연산하는 애들은 전역변수 선언에서 제외함.
 k = 2*pi/lambda;
 kmax = sqrt(k^2*nf^2-k^2*ns^2);
-kappa= (0:1:kmax);
+kappa= (0:5000:kmax);
 beta = sqrt(k^2*nf^2-kappa.^2);
 gammas=sqrt(beta.^2-k^2*ns^2);
 gammac=sqrt(beta.^2-k^2*nc^2);
 %% 
 rte=[];%roots Of even FZERO
-for i = 1:1000:kmax %교점을 찾아낸다
+for i = 1:10000:kmax %교점을 찾아낸다
     rt = round((fzero(@(x)ef(x),i)),3);
     if rt > 0
         rte = union(rte,rt); 
@@ -57,54 +57,24 @@ mods = union(emd,omd)
 lmods = length(mods)
 %even 그래프 출력부분
 figure
-ax1 = subplot(lmods+1,1,1);%find out modes
-plot(ax1,kappa.*h./2,(kappa.*h./2).*tan(kappa.*h./2),'c')
+
+plot(kappa.*h./2,(kappa.*h./2).*tan(kappa.*h./2),'c')
 hold on
-plot(ax1,kappa.*h./2,-1*(kappa.*h./2).*cot(kappa.*h./2),'b')
+plot(kappa.*h./2,-1*(kappa.*h./2).*cot(kappa.*h./2),'b')
 hold on %교점
-plot(ax1,kappa.*h./2,sqrt(-1*(kappa.*h./2).^2+(nf^2-ns^2)*((k*h/2)^2)),'g')
+plot(kappa.*h./2,sqrt(-1*(kappa.*h./2).^2+(nf^2-ns^2)*((k*h/2)^2)),'g')
 xlabel('k_{x}h/2')
 ylabel('\gammad/2')
-axis tight
 for i = 1:lemd
     r = emd(i);
-    plot(ax1,r*h./2,(r.*h./2).*tan(r.*h./2),'o')
+    plot(r*h./2,(r.*h./2).*tan(r.*h./2),'o')
     hold on
 end    
 for i = 1:lomd
     r = omd(i);
-    plot(ax1,r*h./2,-1*(r.*h./2).*cot(r.*h./2),'o')
+    plot(r*h./2,-1*(r.*h./2).*cot(r.*h./2),'o')
     hold on
 end    
 %그래프 속성
-axis(ax1,[0 kmax*h/2+1 0 kmax*h/2+1]);
+axis([0 kmax*h/2+1 0 kmax*h/2+1]);
 grid on;
-%mode그래프
-
-wave=[];
-
-for i = 1:lmods
-    md= mods(i);
-    x=-h:0.00000001:h;
-    k=0;
-    if mod(i,2) ~= 0
-        for it = x
-            k=k+1;
-            x(k) = it;
-            wave(k)=ew(x(k),md);
-        end
-    else    
-        for it = x
-            k=k+1;
-            x(k) = it;
-            wave(k)=ow(x(k),md);
-        end
-    end    
-    ax = subplot(lmods+1,1,i+1);
-    plot(ax,x,wave)
-    axis tight
-    %xlim(ax,[-h h])
-    title(['<mode' num2str(i-1) '>'])
-    xlabel('Position(\mum)')
-    grid on;
-end

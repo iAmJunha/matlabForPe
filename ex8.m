@@ -12,8 +12,8 @@ n4 = 1;
 %n4 = input('Refrective index of n4 :');
 n5 = 1;
 %n5 = input('Refrective index of n5 :');
-height = 0.1;
-width = 0.1;
+height = 0.27;
+width = 0.2;
 a = height*10^(-4);
 b = width*10^(-4);
 global lambda nf ns nc h  %전역변수 지정 
